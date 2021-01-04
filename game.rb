@@ -1,5 +1,3 @@
-require "./player"
-
 class Game
   attr_accessor :current_turn, :state
 
@@ -17,6 +15,14 @@ class Game
     puts "#{@current_turn.name} What's #{@num1} plus #{@num2}?"
   end
 
+  def change_turn
+    if @current_turn == @p1 
+      @current_turn = @p2
+    else
+      @current_turn = @p1
+    end
+  end
+
   def game_loop
     while @state != "Game Over"
       generate_question()
@@ -24,11 +30,12 @@ class Game
       answer = gets.chomp
       if answer.to_i == @answer
         puts "Good job!"
-        if @current_turn == @p1 
-          @current_turn = @p2
-        else
-          @current_turn = @p1
-        end
+        change_turn()
+      else
+        puts "#{@current_turn.name}: Seriously? No!"
+        @current_turn.take_life()
+        puts "P1: #{@p1.lives}/3 vs. P2: #{@p2.lives}/3"
+        change_turn()
       end
     end 
   end
